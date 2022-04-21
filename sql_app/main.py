@@ -1,4 +1,4 @@
-from typing import Optional, List
+from typing import List
 
 from fastapi import FastAPI, Depends
 from .database import SessionLocal, engine
@@ -64,4 +64,9 @@ def delete_shelf(shelf_id: int, db: Session = Depends(get_db)):
 @app.put("/api/v1/shelves/{shelf_id}", response_model=schemas.Shelf)
 def update_shelf(shelf: schemas.ShelfCreate, db: Session = Depends(get_db)):
     return crud.update_shelf(db, shelf)
+
+
+@app.post("/api/v1/shelves/{shelf_id}", response_model=schemas.BookShelves)
+def add_book_to_shelf(book_id: int, shelf_id: int, db: Session = Depends(get_db)):
+    return crud.add_book_on_shelf(db, shelf_id, book_id)
 

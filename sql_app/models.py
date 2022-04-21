@@ -15,9 +15,6 @@ class Users(Base):
     email = Column(String, nullable=False)
     type_of_user = Column(Boolean, nullable=False)
 
-    # review = relationship("Reviews", back_populates="user")
-    # transaction = relationship("Transactions", back_populates="user")
-
 
 class Authors(Base):
     __tablename__ = "authors"
@@ -29,8 +26,6 @@ class Authors(Base):
     date_of_birth = Column(Date)
     date_of_death = Column(Date)
 
-    # book = relationship("Books", back_populates="author")
-
 
 class Books(Base):
     __tablename__ = "books"
@@ -39,13 +34,7 @@ class Books(Base):
     title = Column(String, nullable=False)
     price = Column(Float, nullable=False)
     link = Column(String)
-    author_id = Column(Integer, ForeignKey("authors.id"))
     publication_year = Column(Integer)
-
-    # author = relationship("Authors")
-    # review = relationship("Reviews")
-    # transaction = relationship("Transactions")
-    # shelf_of_book = relationship("BookShelves")
 
 
 class Shelves(Base):
@@ -102,6 +91,3 @@ class Transactions(Base):
     book_id = Column(Integer, ForeignKey("books.id"))
     user_id = Column(Integer, ForeignKey("users.id"))
     access = Column(Boolean, nullable=False)
-
-    # user = relationship("Users", back_populates="transaction")
-    # book = relationship("Books")

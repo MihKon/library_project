@@ -1,5 +1,5 @@
 from datetime import date
-from typing import Optional, List
+from typing import List
 
 from pydantic import BaseModel
 
@@ -40,7 +40,6 @@ class BookBase(BaseModel):
     title: str
     price: float
     link: str
-    author_id: int
     publication_year: int
 
 
@@ -66,6 +65,10 @@ class Shelf(ShelfBase):
 
     class Config:
         orm_mode = True
+
+
+class ShelfWithBooks(Shelf):
+    books: List[Book]
 
 
 class BookShelvesBase(BaseModel):
