@@ -1,5 +1,4 @@
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Date, Float, Text
-from sqlalchemy.orm import relationship
 
 from .database import Base
 
@@ -46,8 +45,6 @@ class Shelves(Base):
     type_of_shelf = Column(Boolean, nullable=False)
     user_id = Column(Integer, ForeignKey("users.id"))
 
-    # shelf_of_book = relationship("BookShelves", back_populates="books")
-
 
 class BookShelves(Base):
     __tablename__ = "book_shelves"
@@ -56,9 +53,6 @@ class BookShelves(Base):
     shelf_id = Column(Integer, ForeignKey("shelves.id"))
     book_id = Column(Integer, ForeignKey("books.id"))
 
-    # books = relationship("Shelves")
-    # book = relationship("Books")
-
 
 class BooksAuthors(Base):
     __tablename__ = "book_authors"
@@ -66,9 +60,6 @@ class BooksAuthors(Base):
     id = Column(Integer, primary_key=True)
     book_id = Column(Integer, ForeignKey("books.id"))
     author_id = Column(Integer, ForeignKey("authors.id"))
-
-    # author = relationship("Authors")
-    # book = relationship("Books")
 
 
 class Reviews(Base):
@@ -79,9 +70,6 @@ class Reviews(Base):
     book_id = Column(Integer, ForeignKey("books.id"))
     user_id = Column(Integer, ForeignKey("users.id"))
     score = Column(Integer, nullable=False)
-
-    # user = relationship("Users", back_populates="review")
-    # book = relationship("Books")
 
 
 class Transactions(Base):

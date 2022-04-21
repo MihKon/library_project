@@ -29,9 +29,25 @@ def read_authors(db: Session = Depends(get_db)):
     return crud.get_authors(db)
 
 
+# Работа с отзывами
 @app.get("/api/v1/reviews", response_model=List[schemas.Review])
 def read_reviews(db: Session = Depends(get_db)):
     return crud.get_reviews(db)
+
+
+@app.get("/api/v1/reviews/{review_id}", response_model=schemas.Review)
+def read_review(review_id: int, db: Session = Depends(get_db)):
+    return crud.get_review_by_id(db, review_id)
+
+
+@app.post("/api/v1/reviews", response_model=schemas.Review)
+def add_review(review: schemas.ReviewCreate, user_id: int, book_id: int, db: Session = Depends(get_db)):
+    return crud.create_review(db, review, user_id, book_id)
+
+
+@app.delete("/api/v1/reviews/{review_id}", response_model=schemas.Review)
+def delete_review(review_id: int, db: Session = Depends(get_db)):
+    return crud.delete_review_by_id(db, review_id)
 
 
 @app.get("/api/v1/users", response_model=List[schemas.User])
@@ -46,7 +62,7 @@ def read_shelves(db: Session = Depends(get_db)):
     return crud.get_shelves(db)
 
 
-@app.get("/api/v1/shelves/{shelf_id}", response_model=schemas.Shelf)
+@app.get("/api/v1/shelves/{shelf_id}", response_model=schemas.ShelfWithBooks)
 def read_shelf(shelf_id: int, db: Session = Depends(get_db)):
     return crud.get_shelf_by_id(db, shelf_id)
 
@@ -70,3 +86,13 @@ def update_shelf(shelf: schemas.ShelfCreate, db: Session = Depends(get_db)):
 def add_book_to_shelf(book_id: int, shelf_id: int, db: Session = Depends(get_db)):
     return crud.add_book_on_shelf(db, shelf_id, book_id)
 
+
+# URL транзакций
+@app.get("/api/v1/transactions", response_model=List[schemas.Transaction])
+def read_transactions(db: Session = Depends(get_db)):
+    return crud.get_transactions(db)
+
+
+@app.get("/api/v1/transactions/{transaction_id}", response_model=schemas.Transaction)
+def read_transaction(transaction_id: int, db: Session = Depends(get_db)):
+    return crud.get_transaction_by_id(db, transaction_id)
