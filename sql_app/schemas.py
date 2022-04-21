@@ -11,7 +11,7 @@ class UserBase(BaseModel):
     name: str
     surname: str
     email: str
-    type: bool
+    type_of_user: bool
 
 
 class User(UserBase):
@@ -41,7 +41,7 @@ class BookBase(BaseModel):
     price: float
     link: str
     author_id: int
-    publication_year: date
+    publication_year: int
 
 
 class Book(BookBase):
@@ -54,10 +54,15 @@ class ShelfBase(BaseModel):
     id: int
     title: str
     description: str
-    type: bool
+    type_of_shelf: bool
+
+
+class ShelfCreate(ShelfBase):
+    pass
 
 
 class Shelf(ShelfBase):
+    user_id: int
 
     class Config:
         orm_mode = True
@@ -65,11 +70,15 @@ class Shelf(ShelfBase):
 
 class BookShelvesBase(BaseModel):
     id: int
-    shelf_id: int
-    book_id: int
+
+
+class BookShelfCreate(BookShelvesBase):
+    pass
 
 
 class BookShelves(BookShelvesBase):
+    shelf_id: int
+    book_id: int
 
     class Config:
         orm_mode = True
@@ -78,12 +87,16 @@ class BookShelves(BookShelvesBase):
 class ReviewBase(BaseModel):
     id: int
     text: str
-    book_id: int
-    user_id: int
     score: int
 
 
+class ReviewCreate(ReviewBase):
+    pass
+
+
 class Review(ReviewBase):
+    book_id: int
+    user_id: int
 
     class Config:
         orm_mode = True
@@ -91,12 +104,16 @@ class Review(ReviewBase):
 
 class TransactionBase(BaseModel):
     id: int
-    book_id: int
-    user_id: int
     access: bool
 
 
+class TransactionCreate(TransactionBase):
+    pass
+
+
 class Transaction(TransactionBase):
+    book_id: int
+    user_id: int
 
     class Config:
         orm_mode = True
