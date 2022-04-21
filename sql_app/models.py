@@ -24,7 +24,7 @@ class Authors(Base):
 
     id = Column(Integer, primary_key=True)
     surname = Column(String)
-    name = Column(String)
+    name = Column(String, nullable=False)
     patronymic = Column(String)
     date_of_birth = Column(Date)
     date_of_death = Column(Date)
@@ -36,8 +36,8 @@ class Books(Base):
     __tablename__ = "books"
 
     id = Column(Integer, primary_key=True)
-    title = Column(String)
-    price = Column(Float)
+    title = Column(String, nullable=False)
+    price = Column(Float, nullable=False)
     link = Column(String)
     author_id = Column(Integer, ForeignKey("authors.id"))
     publication_year = Column(Date)
@@ -52,9 +52,9 @@ class Shelves(Base):
     __tablename__ = "shelves"
 
     id = Column(Integer, primary_key=True)
-    title = Column(String)
+    title = Column(String, nullable=False)
     description = Column(Text)
-    type_of_shelf = Column(Boolean)
+    type_of_shelf = Column(Boolean, nullable=False)
 
     # shelf_of_book = relationship("BookShelves")
 
@@ -70,6 +70,16 @@ class BookShelves(Base):
     # book = relationship("Books")
 
 
+class BooksAuthors(Base):
+    __tablename__ = "book_authors"
+
+    id = Column(Integer, primary_key=True)
+    book_id = Column(Integer, ForeignKey("books.id"))
+    author_id = Column(Integer, ForeignKey("authors.id"))
+
+    # author = relationship("Authors")
+    # book = relationship("Books")
+
 
 class Reviews(Base):
     __tablename__ = "reviews"
@@ -78,7 +88,7 @@ class Reviews(Base):
     text = Column(Text)
     book_id = Column(Integer, ForeignKey("books.id"))
     user_id = Column(Integer, ForeignKey("users.id"))
-    score = Column(Integer)
+    score = Column(Integer, nullable=False)
 
     # user = relationship("Users")
     # book = relationship("Books")
@@ -90,7 +100,7 @@ class Transactions(Base):
     id = Column(Integer, primary_key=True)
     book_id = Column(Integer, ForeignKey("books.id"))
     user_id = Column(Integer, ForeignKey("users.id"))
-    access = Column(Boolean)
+    access = Column(Boolean, nullable=False)
 
     # user = relationship("Users")
     # book = relationship("Books")
