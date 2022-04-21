@@ -29,7 +29,7 @@ class Authors(Base):
     date_of_birth = Column(Date)
     date_of_death = Column(Date)
 
-    # book = relationship("Books")
+    # book = relationship("Books", back_populates="author")
 
 
 class Books(Base):
@@ -57,7 +57,7 @@ class Shelves(Base):
     type_of_shelf = Column(Boolean, nullable=False)
     user_id = Column(Integer, ForeignKey("users.id"))
 
-    # shelf_of_book = relationship("BookShelves")
+    # shelf_of_book = relationship("BookShelves", back_populates="books")
 
 
 class BookShelves(Base):
