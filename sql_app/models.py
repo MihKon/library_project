@@ -60,7 +60,7 @@ class Shelves(Base):
 
 
 class BookShelves(Base):
-    __tablename__ = "bookShelves"
+    __tablename__ = "book_shelves"
 
     id = Column(Integer, primary_key=True)
     shelf_id = Column(Integer, ForeignKey("shelves.id"))
