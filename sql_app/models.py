@@ -8,15 +8,15 @@ class Users(Base):
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True)
-    login = Column(String)
-    password = Column(String)
-    name = Column(String)
-    surname = Column(String)
-    email = Column(String)
-    type_of_user = Column(String)
+    login = Column(String, nullable=False)
+    password = Column(String, nullable=False)
+    name = Column(String, nullable=False)
+    surname = Column(String, nullable=False)
+    email = Column(String, nullable=False)
+    type_of_user = Column(Boolean, nullable=False)
 
-    review = relationship("Reviews", back_populates="user")
-    transaction = relationship("Transactions", back_populates="user")
+    # review = relationship("Reviews")
+    # transaction = relationship("Transactions")
 
 
 class Authors(Base):
@@ -29,7 +29,7 @@ class Authors(Base):
     date_of_birth = Column(Date)
     date_of_death = Column(Date)
 
-    book = relationship("Books", back_populates="author")
+    # book = relationship("Books")
 
 
 class Books(Base):
@@ -42,10 +42,10 @@ class Books(Base):
     author_id = Column(Integer, ForeignKey("authors.id"))
     publication_year = Column(Date)
 
-    author = relationship("Authors", back_populates="book")
-    review = relationship("Reviews", back_populates="book")
-    transaction = relationship("Transactions", back_populates="book")
-    shelf_of_book = relationship("BookShelves", back_populates="book")
+    # author = relationship("Authors")
+    # review = relationship("Reviews")
+    # transaction = relationship("Transactions")
+    # shelf_of_book = relationship("BookShelves")
 
 
 class Shelves(Base):
@@ -56,7 +56,7 @@ class Shelves(Base):
     description = Column(Text)
     type_of_shelf = Column(Boolean)
 
-    shelf_of_book = relationship("BookShelves", back_populates="shelf")
+    # shelf_of_book = relationship("BookShelves")
 
 
 class BookShelves(Base):
@@ -66,8 +66,9 @@ class BookShelves(Base):
     shelf_id = Column(Integer, ForeignKey("shelves.id"))
     book_id = Column(Integer, ForeignKey("books.id"))
 
-    shelf = relationship("Shelves", back_populates="shelf_of_book")
-    book = relationship("Books", back_populates="shelf_of_book")
+    # shelf = relationship("Shelves")
+    # book = relationship("Books")
+
 
 
 class Reviews(Base):
@@ -79,8 +80,8 @@ class Reviews(Base):
     user_id = Column(Integer, ForeignKey("users.id"))
     score = Column(Integer)
 
-    user = relationship("Users", back_populates="review")
-    book = relationship("Books", back_populates="review")
+    # user = relationship("Users")
+    # book = relationship("Books")
 
 
 class Transactions(Base):
@@ -91,5 +92,5 @@ class Transactions(Base):
     user_id = Column(Integer, ForeignKey("users.id"))
     access = Column(Boolean)
 
-    user = relationship("Users", back_populates="transaction")
-    book = relationship("Books", back_populates="transaction")
+    # user = relationship("Users")
+    # book = relationship("Books")
