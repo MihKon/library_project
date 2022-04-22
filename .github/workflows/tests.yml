@@ -28,7 +28,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install flake8 pytest
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-    - name: Lint with flake8
+    - name: Setup test environment
       run: |
         docker run -d --rm -e POSTGRES_PASSWORD=mysecretpassword -p 5432:5432 --name postgres postgres
         sleep 15
