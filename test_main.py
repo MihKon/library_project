@@ -15,8 +15,8 @@ def test_get_books():
     assert type(response.json()) is list
 
 
-def test_get_one_book():
-    response = client.get("/api/v1/books/1")
+def test_get_shelves():
+    response = client.get("/api/v1/shelves")
     assert response.status_code == 200
     assert type(response.json()) is list
 
