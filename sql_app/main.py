@@ -24,9 +24,19 @@ def read_books(db: Session = Depends(get_db)):
     return crud.get_books(db)
 
 
+@app.get("/api/v1/books/{book_id}", response_model=schemas.Book)
+def read_book(book_id: int, db: Session = Depends(get_db)):
+    return crud.get_book_by_id(db, book_id)
+
+
 @app.get("/api/v1/authors", response_model=List[schemas.Author])
 def read_authors(db: Session = Depends(get_db)):
     return crud.get_authors(db)
+
+
+@app.get("/api/v1/authors/{author_id}", response_model=schemas.Author)
+def read_author(author_id: int, db: Session = Depends(get_db)):
+    return crud.get_author_by_id(db, author_id)
 
 
 # Работа с отзывами
@@ -54,6 +64,12 @@ def delete_review(review_id: int, db: Session = Depends(get_db)):
 def read_users(db: Session = Depends(get_db)):
     users = crud.get_users(db)
     return users
+
+
+@app.get("/api/v1/users/{user_id}", response_model=schemas.User)
+def read_user(user_id: int, db: Session = Depends(get_db)):
+    user = crud.get_user_by_id(db, user_id)
+    return user
 
 
 # URL полок
