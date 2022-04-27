@@ -12,6 +12,11 @@ def get_book_by_id(db: Session, book_id: int):
     return db.query(models.Books).filter(models.Books.id == book_id).first()
 
 
+# Новая функция, нужно проверить её
+def get_book_by_name(db: Session, book_name: str):
+    return db.query(models.Books).filter(models.Books.like(f"%{book_name}%")).all()
+
+
 # Работа с авторами
 def get_authors(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Authors).offset(skip).limit(limit).all()
