@@ -1,20 +1,22 @@
 from sqlalchemy.orm import Session
+from sqlalchemy import or_
 
 from . import models, schemas
 
 
-# Работа с книгами
+# Получение всех книг из БД
 def get_books(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Books).offset(skip).limit(limit).all()
 
 
+# Получение одной книги из БД по id
 def get_book_by_id(db: Session, book_id: int):
     return db.query(models.Books).filter(models.Books.id == book_id).first()
 
 
-# Новая функция, нужно проверить её
+# Поиск книги по названию
 def get_book_by_name(db: Session, book_name: str):
-    return db.query(models.Books).filter(models.Books.like(f"%{book_name}%")).all()
+    return db.query(models.Books).filter(models.Books.title.ilike(f'%{book_name}%')).all()
 
 
 # Работа с авторами
@@ -24,6 +26,15 @@ def get_authors(db: Session, skip: int = 0, limit: int = 100):
 
 def get_author_by_id(db: Session, author_id: int):
     return db.query(models.Authors).filter(models.Authors.id == author_id).first()
+
+
+# Поиск автора по имени
+def get_author_by_name(db: Session, author_name: str):
+    return db.query(models.Authors).filter(or_(
+        models.Authors.name.ilike(f'%{author_name}%'), 
+        models.Authors.surname.ilike(f'%{author_name}%'),
+        models.Authors.patronymic.ilike(f'%{author_name}%'))
+    ).all()
 
 
 def get_users(db: Session, skip: int = 0, limit: int = 100):
@@ -37,6 +48,15 @@ def get_user_by_id(db: Session, user_id: int):
 def get_user_by_login(db: Session, login: str):
     return db.query(models.Users).filter(models.Users.login == login).first()
 
+
+# Поиск пользователя по имени
+def get_user_by_name(db: Session, user_name: str):
+    return db.query(models.Users).filter(or_(
+        models.Users.login.ilike(f'%{user_name}%'), 
+        models.Users.name.ilike(f'%{user_name}%'), 
+        models.Users.surname.ilike(f'%{user_name}%'))
+    ).all()
+  
 
 # Работа с полками
 def create_shelf(db: Session, shelf: schemas.ShelfCreate, user_id: int):

@@ -59,13 +59,13 @@ async def read_book(book_id: int, db: Session = Depends(get_db)):
     return crud.get_book_by_id(db, book_id)
 
 
-# Поиск книг (нужно доделывать)
-@app.get("/api/v1/books/", response_model=schemas.Book)
+# Поиск книг
+@app.get("/api/v1/books/", response_model=List[schemas.Book])
 async def search_book(
-    b: Optional[List[str]] = Query(None)
+    q: Optional[str] = Query(None),
+    db: Session = Depends(get_db)
 ):
-    found_book = {"b": b}
-    return found_book
+    return crud.get_book_by_name(db, q)
 
 
 @app.get("/api/v1/authors", response_model=List[schemas.Author])
@@ -76,6 +76,14 @@ async def read_authors(db: Session = Depends(get_db)):
 @app.get("/api/v1/authors/{author_id}", response_model=schemas.Author)
 async def read_author(author_id: int, db: Session = Depends(get_db)):
     return crud.get_author_by_id(db, author_id)
+
+
+@app.get("/api/v1/authors/", response_model=List[schemas.Author])
+async def search_author(
+    q: Optional[str] = Query(None),
+    db: Session = Depends(get_db)
+):
+    return crud.get_author_by_name(db, q)
 
 
 # Работа с отзывами
@@ -109,6 +117,14 @@ async def read_users(db: Session = Depends(get_db)):
 async def read_user(user_id: int, db: Session = Depends(get_db)):
     user = crud.get_user_by_id(db, user_id)
     return user
+
+
+@app.get("/api/v1/users/", response_model=List[schemas.User])
+async def search_user(
+    q: Optional[str] = Query(None),
+    db: Session = Depends(get_db)
+):
+    return crud.get_user_by_name(db, q)
 
 
 # URL полок
@@ -151,3 +167,4 @@ async def read_transactions(db: Session = Depends(get_db)):
 @app.get("/api/v1/transactions/{transaction_id}", response_model=schemas.Transaction)
 async def read_transaction(transaction_id: int, db: Session = Depends(get_db)):
     return crud.get_transaction_by_id(db, transaction_id)
+
