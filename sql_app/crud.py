@@ -34,6 +34,10 @@ def get_user_by_id(db: Session, user_id: int):
     return db.query(models.Users).filter(models.Users.id == user_id).first()
 
 
+def get_user_by_login(db: Session, login: str):
+    return db.query(models.Users).filter(models.Users.login == login).first()
+
+
 # Работа с полками
 def create_shelf(db: Session, shelf: schemas.ShelfCreate, user_id: int):
     db_shelf = models.Shelves(title=shelf.title, description=shelf.description, type_of_shelf=shelf.type_of_shelf,
