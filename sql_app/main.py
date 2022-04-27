@@ -33,13 +33,24 @@ async def get_current_user(db: Session = Depends(get_db), token: str = Depends(o
     return user
 
 
+@app.post("/token")
+async def login(db: Session = Depends(get_db), form_data: OAuth2PasswordRequestForm = Depends()):
+    user = crud.get_user_by_login(db, form_data.username)
+    if not user:
+        raise HTTPException(status_code=400, detail="Incorrect username or password")
+    password = form_data.password
+    if not password:
+        raise HTTPException(status_code=400, detail="Incorrect username or password")
+    return {"access_token": user.login, "token_type": "bearer"}
+
+
 @app.get("/users/me")
-async def read_users_me(db: Session = Depends(get_db), current_user: schemas.User = Depends(get_current_user)):
+async def read_users_me(current_user: schemas.User = Depends(get_current_user)):
     return current_user
 
 
 @app.get("/api/v1/books", response_model=List[schemas.Book])
-async def read_books(db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)):
+async def read_books(db: Session = Depends(get_db)):
     return crud.get_books(db)
 
 
