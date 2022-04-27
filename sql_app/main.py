@@ -29,6 +29,14 @@ def read_book(book_id: int, db: Session = Depends(get_db)):
     return crud.get_book_by_id(db, book_id)
 
 
+# Поиск книг (нужно доделывать)
+@app.get("/api/v1/books/", response_model=schemas.Book)
+async def search_book(
+    b: Optional[List[str]] = Query(None)
+):
+    found_book = {"b": b}
+    return found_book
+
 @app.get("/api/v1/authors", response_model=List[schemas.Author])
 def read_authors(db: Session = Depends(get_db)):
     return crud.get_authors(db)
