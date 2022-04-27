@@ -9,6 +9,19 @@ from sql_app.main import app
 client = TestClient(app)
 
 
+def get_access_token():
+    r = requests.post("http://127.0.0.1:8000/token", data={
+        'grant_type': 'password',
+        'username': 'ilyamarvin',
+        'password': 'qwerty123456'})
+
+    return r.json()['access_token']
+
+token = get_access_token()
+
+auth_headers = {'Authorization': f'Bearer {token}'}
+
+
 # Тест на просмотр всех книг
 def test_get_books():
     response = client.get("/api/v1/books/")
@@ -24,14 +37,14 @@ def test_get_book_by_id():
 
 # Тест на просмотр всех полок
 def test_get_shelves():
-    response = client.get("/api/v1/shelves/")
+    response = client.get("/api/v1/shelves/", headers=auth_headers)
     assert response.status_code == 200
     assert type(response.json()) is list
 
     
 # Тест на поиск полки
 def test_get_shelf_by_id():
-    response = client.get("/api/v1/shelves/1/")
+    response = client.get("/api/v1/shelves/12/", headers=auth_headers)
     assert response.status_code == 200
 
     

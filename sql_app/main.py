@@ -44,6 +44,12 @@ async def login(db: Session = Depends(get_db), form_data: OAuth2PasswordRequestF
     return {"access_token": user.login, "token_type": "bearer"}
 
 
+@app.post("/registration", response_model=schemas.User)
+async def registration(user: schemas.UserCreate, db: Session = Depends(get_db)):
+    return crud.create_account(db, user)
+
+
+
 @app.get("/api/v1/users/profile")
 async def read_users_me(current_user: schemas.User = Depends(get_current_user)):
     return current_user

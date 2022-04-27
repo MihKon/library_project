@@ -4,6 +4,15 @@ from sqlalchemy import or_
 from . import models, schemas
 
 
+def create_account(db: Session, user: schemas.UserCreate):
+    db_user = models.Users(name=user.name, surname=user.surname, login=user.login, email=user.email, password=user.password, 
+                            type_of_user=False)
+    db.add(db_user)
+    db.commit()
+    db.refresh(db_user)
+    return db_user
+
+
 # Получение всех книг из БД
 def get_books(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Books).offset(skip).limit(limit).all()
