@@ -88,6 +88,14 @@ async def read_user(user_id: int, db: Session = Depends(get_db)):
     return user
 
 
+@app.get("/api/v1/users/", response_model=List[schemas.User])
+async def search_user(
+    q: Optional[str] = Query(None),
+    db: Session = Depends(get_db)
+):
+    return crud.get_user_by_name(db, q)
+
+
 # URL полок
 @app.get("/api/v1/shelves", response_model=List[schemas.Shelf])
 async def read_shelves(db: Session = Depends(get_db)):
