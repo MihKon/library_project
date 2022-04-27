@@ -1,5 +1,5 @@
 from datetime import date
-from typing import List
+from typing import List, Optional
 
 from pydantic import BaseModel
 
@@ -52,7 +52,7 @@ class Book(BookBase):
 class ShelfBase(BaseModel):
     id: int
     title: str
-    description: str
+    description: Optional[str] = None
     type_of_shelf: bool
 
 
@@ -89,7 +89,7 @@ class BookShelves(BookShelvesBase):
 
 class ReviewBase(BaseModel):
     id: int
-    text: str
+    text: Optional[str] = None
     score: int
 
 

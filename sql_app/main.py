@@ -44,7 +44,7 @@ async def login(db: Session = Depends(get_db), form_data: OAuth2PasswordRequestF
     return {"access_token": user.login, "token_type": "bearer"}
 
 
-@app.get("/users/me")
+@app.get("/api/v1/users/profile")
 async def read_users_me(current_user: schemas.User = Depends(get_current_user)):
     return current_user
 
@@ -129,32 +129,35 @@ async def search_user(
 
 # URL полок
 @app.get("/api/v1/shelves", response_model=List[schemas.Shelf])
-async def read_shelves(db: Session = Depends(get_db)):
-    return crud.get_shelves(db)
+async def read_shelves(db: Session = Depends(get_db), current_user: schemas.User = Depends(get_current_user)):
+    return crud.get_shelves(db, current_user.id)
 
 
 @app.get("/api/v1/shelves/{shelf_id}", response_model=schemas.ShelfWithBooks)
-async def read_shelf(shelf_id: int, db: Session = Depends(get_db)):
+async def read_shelf(shelf_id: int, db: Session = Depends(get_db), current_user: schemas.User = Depends(get_current_user)):
     return crud.get_shelf_by_id(db, shelf_id)
 
 
 @app.post("/api/v1/shelves", response_model=schemas.Shelf)
-async def create_shelf(shelf: schemas.ShelfCreate, user_id: int, db: Session = Depends(get_db)):
-    return crud.create_shelf(db, shelf, user_id)
+async def create_shelf(shelf: schemas.ShelfCreate, db: Session = Depends(get_db),
+                        current_user: schemas.User = Depends(get_current_user)):
+    return crud.create_shelf(db, shelf, current_user.id)
 
 
 @app.delete("/api/v1/shelves/{shelf_id}", response_model=schemas.Shelf)
-async def delete_shelf(shelf_id: int, db: Session = Depends(get_db)):
+async def delete_shelf(shelf_id: int, db: Session = Depends(get_db), current_user: schemas.User = Depends(get_current_user)):
     return crud.delete_shelf_by_id(db, shelf_id)
 
 
 @app.put("/api/v1/shelves/{shelf_id}", response_model=schemas.Shelf)
-async def update_shelf(shelf: schemas.ShelfCreate, db: Session = Depends(get_db)):
+async def update_shelf(shelf: schemas.ShelfCreate, db: Session = Depends(get_db), 
+                        current_user: schemas.User = Depends(get_current_user)):
     return crud.update_shelf(db, shelf)
 
 
 @app.post("/api/v1/shelves/{shelf_id}", response_model=schemas.BookShelves)
-async def add_book_to_shelf(book_id: int, shelf_id: int, db: Session = Depends(get_db)):
+async def add_book_to_shelf(book_id: int, shelf_id: int, db: Session = Depends(get_db), 
+                            current_user: schemas.User = Depends(get_current_user)):
     return crud.add_book_on_shelf(db, shelf_id, book_id)
 
 

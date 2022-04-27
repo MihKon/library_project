@@ -19,11 +19,11 @@ class Authors(Base):
     __tablename__ = "authors"
 
     id = Column(Integer, primary_key=True)
-    surname = Column(String)
+    surname = Column(String, nullable=True)
     name = Column(String, nullable=False)
-    patronymic = Column(String)
-    date_of_birth = Column(Date)
-    date_of_death = Column(Date)
+    patronymic = Column(String, nullable=True)
+    date_of_birth = Column(Date, nullable=True)
+    date_of_death = Column(Date, nullable=True)
 
 
 class Books(Base):
@@ -32,8 +32,8 @@ class Books(Base):
     id = Column(Integer, primary_key=True)
     title = Column(String, nullable=False)
     price = Column(Float, nullable=False)
-    link = Column(String)
-    publication_year = Column(Integer)
+    link = Column(String, nullable=True)
+    publication_year = Column(Integer, nullable=True)
 
 
 class Shelves(Base):
@@ -41,7 +41,7 @@ class Shelves(Base):
 
     id = Column(Integer, primary_key=True)
     title = Column(String, nullable=False)
-    description = Column(Text)
+    description = Column(Text, nullable=True)
     type_of_shelf = Column(Boolean, nullable=False)
     user_id = Column(Integer, ForeignKey("users.id"))
 
@@ -66,10 +66,10 @@ class Reviews(Base):
     __tablename__ = "reviews"
 
     id = Column(Integer, primary_key=True)
-    text = Column(Text)
+    text = Column(Text, nullable=True)
+    score = Column(Integer, nullable=False)
     book_id = Column(Integer, ForeignKey("books.id"))
     user_id = Column(Integer, ForeignKey("users.id"))
-    score = Column(Integer, nullable=False)
 
 
 class Transactions(Base):

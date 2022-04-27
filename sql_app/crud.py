@@ -79,8 +79,8 @@ def update_shelf(db: Session, shelf: schemas.ShelfCreate):
     return db.query(models.Shelves).filter(models.Shelves.id == shelf.id).first()
 
 
-def get_shelves(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(models.Shelves).offset(skip).limit(limit).all()
+def get_shelves(db: Session, user_id: int):
+    return db.query(models.Shelves).filter(models.Shelves.user_id == user_id).all()
 
 
 def delete_shelf_by_id(db: Session, shelf_id: int):
