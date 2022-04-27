@@ -1,6 +1,7 @@
 from typing import List, Optional
 
-from fastapi import FastAPI, Depends, Query
+from fastapi import FastAPI, Depends, Query, HTTPException, status
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from .database import SessionLocal, engine
 from . import models, schemas, crud
 from sqlalchemy.orm import Session
@@ -10,6 +11,8 @@ models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+
 
 def get_db():
     db = SessionLocal()
@@ -17,6 +20,33 @@ def get_db():
         yield db
     finally:
         db.close()
+
+
+async def get_current_user(db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)):
+    user = crud.get_user_by_login(db, login=token)
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid authentication credentials",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    return user
+
+
+@app.post("/token")
+async def login(db: Session = Depends(get_db), form_data: OAuth2PasswordRequestForm = Depends()):
+    user = crud.get_user_by_login(db, form_data.username)
+    if not user:
+        raise HTTPException(status_code=400, detail="Incorrect username or password")
+    password = form_data.password
+    if not password:
+        raise HTTPException(status_code=400, detail="Incorrect username or password")
+    return {"access_token": user.login, "token_type": "bearer"}
+
+
+@app.get("/users/me")
+async def read_users_me(current_user: schemas.User = Depends(get_current_user)):
+    return current_user
 
 
 @app.get("/api/v1/books", response_model=List[schemas.Book])
@@ -36,6 +66,7 @@ async def search_book(
     db: Session = Depends(get_db)
 ):
     return crud.get_book_by_name(db, q)
+
 
 @app.get("/api/v1/authors", response_model=List[schemas.Author])
 async def read_authors(db: Session = Depends(get_db)):

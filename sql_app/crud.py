@@ -45,6 +45,10 @@ def get_user_by_id(db: Session, user_id: int):
     return db.query(models.Users).filter(models.Users.id == user_id).first()
 
 
+def get_user_by_login(db: Session, login: str):
+    return db.query(models.Users).filter(models.Users.login == login).first()
+
+
 # Поиск пользователя по имени
 def get_user_by_name(db: Session, user_name: str):
     return db.query(models.Users).filter(or_(
@@ -52,7 +56,7 @@ def get_user_by_name(db: Session, user_name: str):
         models.Users.name.ilike(f'%{user_name}%'), 
         models.Users.surname.ilike(f'%{user_name}%'))
     ).all()
-    
+  
 
 # Работа с полками
 def create_shelf(db: Session, shelf: schemas.ShelfCreate, user_id: int):
