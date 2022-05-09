@@ -1,4 +1,4 @@
-# Проект Книголюб
+# [Проект Книголюб](https://books-lover.herokuapp.com/)
 Цель проекта — разработка платформы для любителей книг, с помощью которой можно покупать электронные версии книг, выставлять оценки и добавлять отзывы о прочитанных книгах, а также создавать различные коллекции книг, называемые полками.
 
 [![Tests](https://github.com/MihKon/library_project/actions/workflows/tests.yml/badge.svg)](https://github.com/MihKon/library_project/actions/workflows/tests.yml)
@@ -17,4 +17,4 @@
 ### Установка зависимостей
     pip install -r requirements.txt
 ### Запуск приложения (локального сервера)
-	uvicorn sql_app.main:app --reload
+    uvicorn sql_app.main:app --reload
