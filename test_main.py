@@ -114,3 +114,24 @@ def test_add_review():
 def test_delete_review():
     response = client.delete(f"/api/v1/reviews/{review_id}")
     assert response.status_code == 200
+
+
+def test_add_shelf():
+    global shelf_id
+    response = client.post(
+        "/api/v1/shelves", 
+        headers=auth_headers, 
+        json={
+            "id": 0, 
+            "title": "Новая полка", 
+            "description": "Моя новая полка", 
+            "type_of_shelf": True
+        }
+    )
+    assert response.status_code == 200
+    shelf_id = response.json()["id"]
+
+
+def test_delete_shelf():
+    response = client.delete(f"/api/v1/shelves/{shelf_id}", headers=auth_headers)
+    assert response.status_code == 200
