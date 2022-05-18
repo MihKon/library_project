@@ -83,3 +83,34 @@ def test_get_transactions():
 def test_get_transaction_by_id():
     response = client.get("/api/v1/transactions/1/")
     assert response.status_code == 200
+
+
+def test_search_author():
+    response = client.get("/api/v1/authors/?q=Пушкин")
+    assert response.status_code == 200
+    assert type(response.json()) is list
+    assert all(element["surname"] != "Пушкин" for element in response.json()) == False
+
+
+def test_search_book():
+    response = client.get("/api/v1/books/?q=Герой&нашего&времени")
+    assert response.status_code == 200
+    assert type(response.json()) is list
+    assert all(element["title"] != "Герой нашего времени" for element in response.json()) == False
+
+
+def test_get_review_by_id():
+    response = client.get("/api/v1/reviews/1")
+    assert response.status_code == 200
+
+
+def test_add_review():
+    global review_id
+    response = client.post("/api/v1/reviews?user_id=2&book_id=1", json={"id": 0, "text": "Хорошая книга!", "score": 5})
+    assert response.status_code == 200
+    review_id = response.json()["id"]
+
+
+def test_delete_review():
+    response = client.delete(f"/api/v1/reviews/{review_id}")
+    assert response.status_code == 200
